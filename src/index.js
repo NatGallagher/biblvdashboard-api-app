@@ -1,3 +1,10 @@
+const express = require("express");  
+const cors = require("cors");  
+const app = express();  
+
+//cors allow access to same site or other localhost 
+app.use(cors()) 
+
 //localhost port range - 3000 - 9999
 const SERVER_PORT = 8080; 
 
