@@ -28,6 +28,24 @@ app.get("/test1", (req,res) => {
     res.send(_msg)
 });
 
+app.get("/login/:username/:password", (req,res) => {
+     //declare username and password
+     const _username = req.params.username;
+     const _password = req.params.username;
+ 
+     //send message to log
+     let msg = `login recieved: username: ${_username}, password: ${_password}`;
+     console.log(msg);
+     let _data = {};
+
+     //validate login in database with msg and data
+     msg = "login successful";
+     _data = {msg: msg, login: true };
+    
+     res.send(_data);
+});
+
+
 //-other - POST, DELETE, PUT
 
 //-start node exporess web server - ie: live server
