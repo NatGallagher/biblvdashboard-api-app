@@ -1,8 +1,12 @@
 const express = require("express");  
 const cors = require("cors");  
-const app = express(); 
-const bodyParser = require("body-parser")
-const { login, insert_user } = require("./dbutil.js") 
+const app = express();  
+const bodyParser = require("body-parser");
+
+//- node middleware
+//-- optinal for some versions of nodejs
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 //cors allow access to same site or other localhost 
 app.use(cors()) 
@@ -31,7 +35,7 @@ app.get("/test1", (req,res) => {
 app.get("/login/:username/:password", (req,res) => {
      //declare username and password
      const _username = req.params.username;
-     const _password = req.params.username;
+     const _password = req.params.password;
  
      //send message to log
      let msg = `login recieved: username: ${_username}, password: ${_password}`;
