@@ -73,4 +73,4 @@ const login = function(username, password, logincb) {
     return _return;
 }
 
-module.exports = { login, insert_user };
+module.exports = { login  };
