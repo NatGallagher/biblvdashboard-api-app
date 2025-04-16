@@ -1,5 +1,5 @@
-const express = require("express");  
-const cors = require("cors");  
+const express = require("express"); //coding framework 
+const cors = require("cors");  //does not block different servers
 const app = express();  
 const bodyParser = require("body-parser");
 
