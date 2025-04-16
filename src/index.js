@@ -2,7 +2,7 @@ const express = require("express"); //coding framework
 const cors = require("cors");  //does not block different servers
 const app = express();  
 const bodyParser = require("body-parser");
-const { login, insert_user } = require("./dbutil");
+const { login } = require("./dbutil");
 
 //- node middleware
 //-- optinal for some versions of nodejs
