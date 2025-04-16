@@ -1,6 +1,6 @@
 const sqlite3 = require("sqlite3").verbose();
 
-const db_name = "src\\data\\biblevdashboard.db";
+const db_name = "src/data/biblevdashboard.db";
 
 const login = function(username, password, logincb) {
     const _function_name = "login";
@@ -15,7 +15,7 @@ const login = function(username, password, logincb) {
         
         //declare connection to sqlite3.Database
         const db = new sqlite3.Database(
-            db.name,
+            db_name,
             sqlite3.OPEN_READWRITE,
             (err) => {
                 if (err) {
@@ -26,6 +26,15 @@ const login = function(username, password, logincb) {
                 else {
                     msg = "connecting to db";
                     console.log(msg);
+
+                    db.all("SELECT * FROM user", [], (err, rows) => {
+                        if (err) {
+                          console.log("ERROR reading user table:", err);
+                        } else {
+                          console.log("USER TABLE ROWS:", rows);
+                        }
+                      });
+                    
                 }
             },
         );
@@ -47,6 +56,10 @@ const login = function(username, password, logincb) {
                         msg = `user: ${row.id} - ${row.username}`;
                         console.log(msg);
                         _return = true;
+                        logincb(_return);
+                    } else {
+                        msg = "user not found"
+                        console.log(msg);
                         logincb(_return);
                     }
                 }
@@ -73,4 +86,4 @@ const login = function(username, password, logincb) {
     return _return;
 }
 
-module.exports = { login  };
+module.exports = { login };

@@ -1,8 +1,16 @@
-const express = require("express"); //coding framework 
-const cors = require("cors");  //does not block different servers
-const app = express();  
+const express = require("express");
+const cors = require("cors");
+const app = express();
 const bodyParser = require("body-parser");
-const { login } = require("./dbutil");
+
+// FIRST: Import the whole module
+const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file name
+
+// THEN: Log the whole module for debugging
+console.log("dbutil module:", dbutil);
+
+// THEN: Destructure login from the module
+const { login } = dbutil;
 
 //- node middleware
 //-- optinal for some versions of nodejs
