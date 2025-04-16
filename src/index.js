@@ -2,6 +2,7 @@ const express = require("express"); //coding framework
 const cors = require("cors");  //does not block different servers
 const app = express();  
 const bodyParser = require("body-parser");
+const { login, insert_user } = require("./dbutil");
 
 //- node middleware
 //-- optinal for some versions of nodejs
@@ -38,15 +39,24 @@ app.get("/login/:username/:password", (req,res) => {
      const _password = req.params.password;
  
      //send message to log
-     let msg = `login recieved: username: ${_username}, password: ${_password}`;
-     console.log(msg);
+     let _msg = `login recieved: username: ${_username}, password: ${_password}`;
+     console.log(_msg);
      let _data = {};
 
-     //validate login in database with msg and data
-     msg = "login successful";
-     _data = {msg: msg, login: true };
+     login(_username, _password, (islogin) => {
+        //msg successful or unsuccessful & return as json
+        _msg = "login successful";
+        _data = {msg: _msg, login: true};
+
+        if (!islogin) {
+            _msg = "invalid username/password"
+            _data = {msg: _msg, login: false};
+        }
+
+       res.send(_data);
+     })
     
-     res.send(_data);
+     
 });
 
 
