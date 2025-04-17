@@ -10,7 +10,7 @@ const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file 
 console.log("dbutil module:", dbutil);
 
 // THEN: Destructure login from the module
-const { login } = dbutil;
+const { login, insert_user } = dbutil;
 
 //- node middleware
 //-- optinal for some versions of nodejs
@@ -69,6 +69,30 @@ app.get("/login/:username/:password", (req,res) => {
 
 
 //-other - POST, DELETE, PUT
+
+app.post("/register", (req, res) => {
+    const _body = req.body;
+
+    let msg = `register route, body: ${JSON.stringify(_body)}`;
+    console.log(msg);
+
+    let _return = {};
+
+    const _username = _body.username;
+    const _password = _body.password;
+
+    insert_user(_username, _password, (isnewuser) => {
+        msg = "registration successful";
+        _return = {msg: msg, register: true};
+
+        if (!isnewuser) {
+            msg = "user already exists"
+            _return = {msg: msg, register: false};
+        }
+        
+        res.send(_return)
+    });
+});
 
 //-start node exporess web server - ie: live server
 app.listen(SERVER_PORT, ()=>{

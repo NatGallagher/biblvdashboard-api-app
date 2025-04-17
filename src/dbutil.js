@@ -84,6 +84,69 @@ const login = function(username, password, logincb) {
     }
 
     return _return;
+};
+
+const insert_user = function(username, password, insertusercb) {
+    const _function_name = "_insert_user";
+    let msg = "";
+    let _return = false;
+
+    try {
+        msg = `${_function_name}`
+
+        const db = new sqlite3.Database(
+            db_name,
+            sqlite3.OPEN_READWRITE,
+            (err) => {
+                if (err) {
+                    msg = "error connecting to db"
+                    console.log(msg);
+                    console.log(err);
+                } else {
+                    msg = "connected to db"
+                    console.log(msg);
+                }
+            }
+        );
+
+        const _uid = username;
+        const _pwd = password;
+
+        db.run(
+            `INSERT INTO user(username, password) VALUES('${_uid}' and '${_pwd}')`,
+            (err) => {
+                if(err) {
+                    msg = "error inserting user"
+                    console.log(msg);
+                    _return = false;
+                    insertusercb(_return);
+                } else {
+                    msg = `new userid: ${this.id}`;
+                    console.log(msg);
+
+                    _return = true;
+                    insertusercb(_return);
+                }
+            }
+        );
+
+        db.close((err) => {
+            if (err) {
+                console.log("error closing db");
+                console.log(err);
+                _return = false;
+            } else {
+                console.log("db closed");
+                _return = true;
+            }
+        })
+    } catch (error) {
+        console.log(`${_function_name}: error`);
+        console.log(error);
+        _return = false;
+    }
+
+    return _return;
 }
 
-module.exports = { login };
+module.exports = { login, insert_user };
