@@ -49,6 +49,7 @@ app.get("/login/:username/:password", (req,res) => {
      //send message to log
      let _msg = `login recieved: username: ${_username}, password: ${_password}`;
      console.log(_msg);
+     
      let _data = {};
 
      login(_username, _password, (islogin) => {
