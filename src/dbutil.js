@@ -113,7 +113,7 @@ const insert_user = function(username, password, insertusercb) {
         const _pwd = password;
 
         db.run(
-            `INSERT INTO user(username, password) VALUES('${_uid}' and '${_pwd}')`,
+            `INSERT INTO user(username, password) VALUES('${_uid}', '${_pwd}')`,
             (err) => {
                 if(err) {
                     msg = "error inserting user"
@@ -121,7 +121,7 @@ const insert_user = function(username, password, insertusercb) {
                     _return = false;
                     insertusercb(_return);
                 } else {
-                    msg = `new userid: ${this.id}`;
+                    msg = `new userid: ${this.lastID}`;
                     console.log(msg);
 
                     _return = true;
