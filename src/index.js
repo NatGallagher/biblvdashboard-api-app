@@ -95,6 +95,20 @@ app.post("/register", (req, res) => {
     });
 });
 
+app.get("/saved-verses", authenticateUser, async (req, res) => {
+    const userId = req.user.id;
+
+    try {
+        const verses = await db.all(
+            `SELECT book, chapter, verse FROM savedVerses WHERE user_id = ?`, [userId]
+        );
+        res.json(verses);
+    } catch (err) {
+        console.error("Database error:", err);
+        res.status(500).json({msg: "failed to fetch saved verses"});
+    }
+})
+
 //-start node exporess web server - ie: live server
 app.listen(SERVER_PORT, ()=>{
     let _msg = "node express websever running at port: " + SERVER_PORT;
