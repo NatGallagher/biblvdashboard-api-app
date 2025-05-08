@@ -149,4 +149,50 @@ const insert_user = function(username, password, insertusercb) {
     return _return;
 }
 
-module.exports = { login, insert_user };
+const getAllVerses = function(callback) {
+    const _function_name = "getAllVerses";
+    console.log(`${_function_name}: start`);
+   
+
+    try {
+        msg = `${_function_name}`
+
+        const db = new sqlite3.Database(
+            db_name,
+            sqlite3.OPEN_READWRITE,
+            (err) => {
+                if (err) {
+                    console.error("Error connecting to DB:", err.message);
+                    callback([]);
+                    return;
+                } else {
+                    msg = "connected to db"
+                    console.log(msg);
+                }
+            }
+        );
+
+        db.all(`SELECT book, chapter, verse FROM verses`, [], (err, rows) => {
+            if (err) {
+                console.error("Error fetching verses", err.message);
+            } else {
+                console.log("Success fetching verses", rows);
+                callback(rows);
+            }
+        })
+
+        db.close((err) => {
+            if (err) {
+                console.error("Error closing DB:", err.message);
+            } else {
+                console.log("db closed");
+            }
+        })
+    } catch (error) {
+        console.log(`${_function_name}: error`);
+        console.log(error);
+        
+    }
+}
+
+module.exports = { login, insert_user, getAllVerses };

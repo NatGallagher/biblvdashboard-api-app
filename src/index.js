@@ -3,6 +3,8 @@ const cors = require("cors");
 const app = express();
 const bodyParser = require("body-parser");
 
+let currentUser = null;
+
 // FIRST: Import the whole module
 const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file name
 
@@ -10,7 +12,7 @@ const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file 
 console.log("dbutil module:", dbutil);
 
 // THEN: Destructure login from the module
-const { login, insert_user } = dbutil;
+const { login, insert_user, getAllVerses } = dbutil;
 
 //- node middleware
 //-- optinal for some versions of nodejs
@@ -52,7 +54,7 @@ app.get("/login/:username/:password", (req,res) => {
      
      let _data = {};
 
-     login(_username, _password, (islogin) => {
+     login(_username, _password, async (islogin) => {
         //msg successful or unsuccessful & return as json
         _msg = "login successful";
         _data = {msg: _msg, login: true};
@@ -63,6 +65,7 @@ app.get("/login/:username/:password", (req,res) => {
         }
 
        res.send(_data);
+
      })
     
      
@@ -95,19 +98,16 @@ app.post("/register", (req, res) => {
     });
 });
 
-app.get("/saved-verses", authenticateUser, async (req, res) => {
-    const userId = req.user.id;
 
-    try {
-        const verses = await db.all(
-            `SELECT book, chapter, verse FROM savedVerses WHERE user_id = ?`, [userId]
-        );
-        res.json(verses);
-    } catch (err) {
-        console.error("Database error:", err);
-        res.status(500).json({msg: "failed to fetch saved verses"});
-    }
-})
+
+    app.get("/saved-verses", async (req, res) => {
+
+        getAllVerses((verses) => {
+            res.json({ msg: verses});
+        })
+    
+    })
+
 
 //-start node exporess web server - ie: live server
 app.listen(SERVER_PORT, ()=>{
