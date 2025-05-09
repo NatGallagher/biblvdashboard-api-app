@@ -129,7 +129,7 @@ app.post("/register", (req, res) => {
             if(err) {
                 return res.status(500).json({ message: "Error deleting verse" });
             } else {
-                res.status(200).json({ message: "Sucess deleting verse" });
+                res.status(200).json({ message: "Success deleting verse" });
             }
 
         })
