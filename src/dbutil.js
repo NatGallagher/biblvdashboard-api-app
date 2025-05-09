@@ -195,4 +195,52 @@ const getAllVerses = function(callback) {
     }
 }
 
-module.exports = { login, insert_user, getAllVerses };
+const insertVerse = function(book, chapter, verse, callback) {
+    const _function_name = "getAllVerses";
+    console.log(`${_function_name}: start`);
+
+    
+
+    try {
+        msg = `${_function_name}`
+
+        const db = new sqlite3.Database(
+            db_name,
+            sqlite3.OPEN_READWRITE,
+            (err) => {
+                if (err) {
+                    console.error("Error connecting to DB:", err.message);
+                    callback(false);
+                    return;
+                } else {
+                   console.log("connected to db");
+                }
+            }
+        );
+
+
+        db.run(`INSERT INTO verses(book, chapter, verse) VALUES(?, ?, ?)`, [book, chapter, verse],
+            (err) => {
+            if (err) {
+                console.error("Error inserting verses", err.message);
+            } else {
+                console.log("Success inserting verses", this.lastID);
+                callback(true);
+            }
+        })
+
+        db.close((err) => {
+            if (err) {
+                console.error("Error closing DB:", err.message);
+            } else {
+                console.log("db closed");
+            }
+        })
+    } catch (error) {
+        console.log(`${_function_name}: error`);
+        console.log(error);
+        
+    }
+}
+
+module.exports = { login, insert_user, getAllVerses, insertVerse };

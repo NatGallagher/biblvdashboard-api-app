@@ -12,7 +12,7 @@ const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file 
 console.log("dbutil module:", dbutil);
 
 // THEN: Destructure login from the module
-const { login, insert_user, getAllVerses } = dbutil;
+const { login, insert_user, getAllVerses, insertVerse } = dbutil;
 
 //- node middleware
 //-- optinal for some versions of nodejs
@@ -106,6 +106,20 @@ app.post("/register", (req, res) => {
             res.json({ msg: verses});
         })
     
+    })
+
+    app.post("/insert-verse", async (req, res) => {
+
+        const { book, chapter, verse} = req.body;
+
+        insertVerse(book, chapter, verse, (success) => {
+            if (success) {
+                res.json({ msg: "verse added" });
+            } else {
+                res.status(500).json({ msg: "error inserting verse" });
+            }
+        })
+
     })
 
 
