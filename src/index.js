@@ -12,7 +12,7 @@ const dbutil = require("./dbutil");  // or "./dbulti" if that's the actual file 
 console.log("dbutil module:", dbutil);
 
 // THEN: Destructure login from the module
-const { login, insert_user, getAllVerses, insertVerse } = dbutil;
+const { login, insert_user, getAllVerses, insertVerse, deleteVerseById } = dbutil;
 
 //- node middleware
 //-- optinal for some versions of nodejs
@@ -120,6 +120,19 @@ app.post("/register", (req, res) => {
             }
         })
 
+    })
+
+    app.delete("/delete-verse", async (req, res) => {
+        const { id } = req.body;
+
+        deleteVerseById(id, (err) => {
+            if(err) {
+                return res.status(500).json({ message: "Error deleting verse" });
+            } else {
+                res.status(200).json({ message: "Sucess deleting verse" });
+            }
+
+        })
     })
 
 

@@ -172,7 +172,7 @@ const getAllVerses = function(callback) {
             }
         );
 
-        db.all(`SELECT book, chapter, verse FROM verses`, [], (err, rows) => {
+        db.all(`SELECT id, book, chapter, verse FROM verses`, [], (err, rows) => {
             if (err) {
                 console.error("Error fetching verses", err.message);
             } else {
@@ -243,4 +243,53 @@ const insertVerse = function(book, chapter, verse, callback) {
     }
 }
 
-module.exports = { login, insert_user, getAllVerses, insertVerse };
+const deleteVerseById = function(id, callback) {
+
+    const _function_name = "deleteVerseById";
+    console.log(`${_function_name}: start`);    
+
+    try {
+        msg = `${_function_name}`
+
+        const db = new sqlite3.Database(
+            db_name,
+            sqlite3.OPEN_READWRITE,
+            (err) => {
+                if (err) {
+                    console.error("Error connecting to DB:", err.message);
+                    callback(false);
+                    return;
+                } else {
+                   console.log("connected to db");
+                }
+            }
+        );
+
+        db.run(`DELETE FROM verses WHERE id = ?`, [id],
+            function (err) {
+                if (err) {
+                    console.error("Error deleting verse:", err);
+                    return callback(err);
+                } else {
+                    callback(null);
+                }
+                
+            }
+            
+        )
+
+        db.close((err) => {
+            if (err) {
+                console.error("Error closing DB:", err.message);
+            } else {
+                console.log("db closed");
+            }
+        })
+    } catch (error) {
+        console.log(`${_function_name}: error`);
+        console.log(error);
+        
+    }
+}
+
+module.exports = { login, insert_user, getAllVerses, insertVerse, deleteVerseById };
